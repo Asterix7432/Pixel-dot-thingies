@@ -52,15 +52,18 @@ class Plane:
         return force_x, force_y, force_z
 
 def main():
+    global SCREEN_HEIGHT
+    global SCREEN_WIDTH
+
     pygame.init()
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("")
     clock = pygame.time.Clock()
 
    
-    angle_degrees = 30
+    angle_degrees = 10
     angle_radians = math.radians(angle_degrees)
-    num_particles = 10
+    num_particles = 150
     particles = []
 
     
@@ -69,10 +72,11 @@ def main():
    
     for _ in range(num_particles):
         particle_pos = [random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)]
-        particle_radius = random.randint(5, 20)
+        particle_radius = random.randint(5, 10)
         particle_mass = particle_radius ** 2  
         particle = Particle(particle_pos, particle_radius, particle_mass)
         particles.append(particle)
+
 
     running = True
     while running:
@@ -88,7 +92,13 @@ def main():
         
         for particle in particles:
             particle.acceleration = [force_x / particle.mass, force_y / particle.mass, force_z / particle.mass]
-            particle.update(.05)  
+            particle.update(.20)
+
+            if not (0<particle.pos[0]<SCREEN_WIDTH):
+                particle.velocity[0] *= -1
+
+            if not (0<particle.pos[1]<SCREEN_HEIGHT):
+                particle.velocity[1] *= -1
 
            
             for other_particle in particles:
