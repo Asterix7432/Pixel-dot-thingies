@@ -3,6 +3,13 @@ import math
 import random
 
 
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+
+SCREEN_WIDTH = 800
+SCREEN_HEIGHT = 600
+
 class Particle:
     def __init__(self, pos, radius, mass):
         self.pos = pos
@@ -27,6 +34,7 @@ class Particle:
             v1y = (self.velocity[1] * (self.mass - other_particle.mass) + 2 * other_particle.mass * other_particle.velocity[1]) / total_mass
             v2x = (other_particle.velocity[0] * (other_particle.mass - self.mass) + 2 * self.mass * self.velocity[0]) / total_mass
             v2y = (other_particle.velocity[1] * (other_particle.mass - self.mass) + 2 * self.mass * self.velocity[1]) / total_mass
+            
             self.velocity = [v1x, v1y]
             other_particle.velocity = [v2x, v2y]
 
@@ -37,37 +45,52 @@ class Plane:
         self.angle = angle
 
     def force(self, mass=1):
+        
         force_x = mass * Plane.g * math.sin(self.angle)
         force_y = mass * Plane.g * math.cos(self.angle)
-        return force_x, force_y,
+        force_z = -mass * Plane.g * math.cos(self.angle)  
+        return force_x, force_y, force_z
+
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((300, 300))
+    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
     pygame.display.set_caption("")
     clock = pygame.time.Clock()
+
+   
     angle_degrees = 30
     angle_radians = math.radians(angle_degrees)
     num_particles = 10
     particles = []
 
-   
+    
     plane = Plane(angle_radians)
 
    
     for _ in range(num_particles):
-        particle_pos = [random.randint(0, 300), random.randint(0, 300)]
+        particle_pos = [random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)]
         particle_radius = random.randint(5, 20)
         particle_mass = particle_radius ** 2  
         particle = Particle(particle_pos, particle_radius, particle_mass)
         particles.append(particle)
-        force_x, force_y = plane.force()
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        screen.fill(WHITE)
+
         
+        force_x, force_y, force_z = plane.force()
 
+        
         for particle in particles:
-            particle.acceleration = [force_x / particle.mass, force_y / particle.mass,]
-            particle.update(0.01) 
+            particle.acceleration = [force_x / particle.mass, force_y / particle.mass, force_z / particle.mass]
+            particle.update(.05)  
 
-            
+           
             for other_particle in particles:
                 if particle != other_particle:
                     particle.collide(other_particle)
@@ -79,4 +102,6 @@ def main():
         
 
     pygame.quit()
+
+
 main()
