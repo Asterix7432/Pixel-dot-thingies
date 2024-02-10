@@ -60,7 +60,7 @@ def main():
         particle_mass = particle_radius ** 2  
         particle = Particle(particle_pos, particle_radius, particle_mass)
         particles.append(particle)
-        force_x, force_y, force_z = plane.force()
+        force_x, force_y, 
 
         for particle in particles:
             particle.acceleration = [force_x / particle.mass, force_y / particle.mass,]
