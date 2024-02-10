@@ -57,7 +57,7 @@ def main():
     for _ in range(num_particles):
         particle_pos = [random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)]
         particle_radius = random.randint(5, 20)
-        particle_mass = particle_radius ** 2  # Mass proportional to the square of the radius
+        particle_mass = particle_radius ** 2  
         particle = Particle(particle_pos, particle_radius, particle_mass)
         particles.append(particle)
         force_x, force_y, force_z = plane.force()
