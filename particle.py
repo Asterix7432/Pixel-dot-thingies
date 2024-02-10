@@ -42,7 +42,7 @@ class Plane:
         return force_x, force_y,
 def main():
     pygame.init()
-    screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    screen = pygame.display.set_mode((300, 300))
     pygame.display.set_caption("")
     clock = pygame.time.Clock()
     angle_degrees = 30
@@ -55,12 +55,13 @@ def main():
 
    
     for _ in range(num_particles):
-        particle_pos = [random.randint(0, SCREEN_WIDTH), random.randint(0, SCREEN_HEIGHT)]
+        particle_pos = [random.randint(0, 300), random.randint(0, 300)]
         particle_radius = random.randint(5, 20)
         particle_mass = particle_radius ** 2  
         particle = Particle(particle_pos, particle_radius, particle_mass)
         particles.append(particle)
-        force_x, force_y, 
+        force_x, force_y = plane.force()
+        
 
         for particle in particles:
             particle.acceleration = [force_x / particle.mass, force_y / particle.mass,]
@@ -72,9 +73,10 @@ def main():
                     particle.collide(other_particle)
 
             
-            pygame.draw.circle()
+            pygame.draw.circle(screen, BLACK, (int(particle.pos[0]), int(particle.pos[1])), particle.radius)
 
         pygame.display.flip()
         
 
     pygame.quit()
+main()
